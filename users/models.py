@@ -33,8 +33,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=100, unique=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    activation_code = models.CharField(max_length=10, blank=True)
-    is_owner = models.BooleanField(default=False)
 
 
     objects = UserManager()
