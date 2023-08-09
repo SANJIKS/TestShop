@@ -20,26 +20,3 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict):
         user = User.objects.create_user(**validated_data)
         return user
-
-
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField() # Используйте username вместо email
-    password = serializers.CharField()
-
-    def validate_username(self, username):
-        if not User.objects.filter(username=username).exists():
-            raise serializers.ValidationError('Пользователь с таким именем пользователя не найден')
-        return username
-
-    def validate(self, attrs):
-        request = self.context.get('request')
-        username = attrs.get('username')
-        password = attrs.get('password')
-        if username and password:
-            user = authenticate(username=username, password=password, request=request)
-            if not user:
-                raise serializers.ValidationError('Неправильно указан username или пароль')
-        else:
-            raise serializers.ValidationError('username и пароль обязательны к заполнению')
-        attrs['user'] = user
-        return attrs
